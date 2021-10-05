@@ -16,7 +16,7 @@ def decorator(path):
     return log
 
 
-@decorator("C:/Users/user/PycharmProjects/py/python/lab3/log.txt")
+@decorator("C:/Users/user/PycharmProjects/py/python/lab4/log.txt")
 def sleep():
     time.sleep(10)
 

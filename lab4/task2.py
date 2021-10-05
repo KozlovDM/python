@@ -1,14 +1,20 @@
-class Mother:
-    def __str__(self):
-        return "Mother"
+def decorator(func):
+    def wrapper(numbers):
+        count = func(numbers)
+        if count == 0:
+            print("Нет")
+        elif count > 10:
+            print("Очень много")
+    return wrapper
 
 
-class Daughter(Mother):
-    def __str__(self):
-        return "Daughter"
+@decorator
+def count_even_numbers(numbers):
+    count = 0
+    for i in numbers:
+        if i % 2 == 0:
+            count += 1
+    return count
 
 
-mother = Mother()
-daughter = Daughter()
-print(mother)
-print(daughter)
+count_even_numbers([2, 4, 6, 8])
