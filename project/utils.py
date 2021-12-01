@@ -1,3 +1,6 @@
+import sys
+
 import telebot
 
-bot = telebot.TeleBot('733494369:AAGkVUhelu_ydG-ESYSHa-4-pUbED3vQXNU')
+bot = telebot.TeleBot(sys.argv[1])
+wolfram_alpha_api = sys.argv[2]

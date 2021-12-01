@@ -1,3 +1,4 @@
+import time
 from datetime import datetime, timedelta
 
 from telebot import types
@@ -35,6 +36,7 @@ def fill_notify_delay(message, notify):
     id_user = message.from_user.id
     notify["delay"] = int(message.text)
     notify["id_user"] = id_user
+    notify["read"] = 0
 
     db = DataBase().get_connection()
     collection = db["notify"]
@@ -57,13 +59,16 @@ def show_notifies(call):
 
 
 def check_notifies():
-    db = DataBase().get_connection()
-    collection = db["notify"]
-    results = collection.find()
-    now = datetime.now()
-    for elem in results:
-        if now >= elem["date"] or now >= elem["date"] - timedelta(elem["delay"]):
-            bot.send_message(elem["id_user"], text=print_notify(elem))
+    while True:
+        db = DataBase().get_connection()
+        collection = db["notify"]
+        results = collection.find()
+        now = datetime.now()
+        for elem in results:
+            if (now >= elem["date"] or now >= elem["date"] - timedelta(elem["delay"])) and elem["read"] == 0:
+                bot.send_message(elem["id_user"], text=print_notify(elem))
+                collection.update_one({"_id": elem["_id"]}, {"$set": {"read": 1}}, upsert=False)
+        time.sleep(3600)
 
 
 def print_notify(notify):
